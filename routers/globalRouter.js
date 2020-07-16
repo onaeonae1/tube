@@ -10,6 +10,9 @@ import {
   postLogin,
   githubLogin,
   postGithubLogIn,
+  getMe,
+  facebookLogIn,
+  postFacebookLogin,
 } from "../controllers/userController";
 import { onlyPublic, onlyPrivate } from "../middlewares";
 
@@ -33,4 +36,5 @@ globalRouter.get(
   postGithubLogIn
 );
 
+globalRouter.get(routes.me, getMe);
 export default globalRouter;

@@ -40,7 +40,7 @@ export const githubLogin = passport.authenticate("github");
 
 export const githubLoginCallback = async (_, __, profile, cb) => {
   const {
-    _json: { id, avata_url, name, email },
+    _json: { id, avatar_url: avatarUrl, name, email },
   } = profile;
   try {
     const user = await User.findOne({ email });
@@ -48,16 +48,14 @@ export const githubLoginCallback = async (_, __, profile, cb) => {
       user.githubId = id;
       user.save();
       return cb(null, user);
-    } else {
-      const newUser = await User.create({
-        email,
-        name,
-        githubId: id,
-        avatarUrl: avata_url,
-      });
-      return cb(null, newUser);
     }
-    console.log(user);
+    const newUser = await User.create({
+      email,
+      name,
+      githubId: id,
+      avatarUrl,
+    });
+    return cb(null, newUser);
   } catch (error) {
     return cb(error);
   }
@@ -72,9 +70,62 @@ export const logout = (req, res) => {
   res.redirect(routes.home);
 };
 
-export const userDetail = (req, res) =>
-  res.render("userDetail", { pageTitle: "User Detail" });
-export const editProfile = (req, res) =>
+export const getMe = (req, res) => {
+  res.render("userDetail", { pageTitle: "User Detail", user: req.user });
+};
+
+export const userDetail = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    const user = await User.findById(id).populate("videos");
+    console.log(user);
+    res.render("userDetail", { pageTitle: "User Detail", user });
+  } catch (error) {
+    res.redirect(routes.home);
+  }
+};
+export const getEditProfile = (req, res) =>
   res.render("editProfile", { pageTitle: "Edit Profile" });
-export const changePassword = (req, res) =>
+
+export const postEditProfile = async (req, res) => {
+  const {
+    body: { name, email },
+    file,
+  } = req;
+  var temp = req.user.avatarUrl;
+  if (file) {
+    temp = file.path;
+  }
+  try {
+    const user = await User.findByIdAndUpdate(req.user.id, {
+      name,
+      email,
+      avatarUrl: temp,
+    });
+    res.redirect(routes.me);
+  } catch (error) {
+    res.render("editProfile", { pageTitle: "Edit Profile" });
+  }
+};
+export const getChangePassword = (req, res) =>
   res.render("changePassword", { pageTitle: "Change Password" });
+export const postChangePassword = (req, res) => {
+  const {
+    body: { oldPassword, newPassword, newPassword1 },
+  } = req;
+  try {
+    if (newPassword !== newPassword1) {
+      console.log("password 1 and password 2 is different");
+      res.status(400);
+      res.redirect(`users/${routes.changePassword}`);
+      return;
+    }
+    req.user.changePassword(oldPassword, newPassword);
+    res.redirect(routes.me);
+  } catch (error) {
+    res.status(400);
+    res.redirect(`users${routes.changePassword}`);
+  }
+};
