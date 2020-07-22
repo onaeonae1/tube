@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "tuuuuuuube",
   "main": "index.js",
-  "engines": {
-    "node": "12.x"
-  },
   "author": "m",
   "license": "ISC",
   "dependencies": {
