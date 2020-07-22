@@ -4,15 +4,20 @@
   "description": "tuuuuuuube",
   "main": "index.js",
   "scripts": {
-    "dev:server": "nodemon --exec babel-node init.js --delay 2 --ignore 'scss' --ignore 'static'",
-    "dev:assets": "cross-env WEBPACK_ENV=development webpack -w",
-    "build:assets": "cross-env WEBPACK_ENV=production webpack"
+    "dev:server": "nodemon --exec babel-node src/init.js --delay 2 --ignore 'scss' --ignore 'static'",
+    "dev:assets": "cd src && cross-env WEBPACK_ENV=development webpack -w",
+    "build:assets": "cd src && cross-env WEBPACK_ENV=production webpack",
+    "build:server": "babel src --out-dir build --ignore 'src/assets','src/static','src/webpack.config.js'",
+    "copyAll": "cp -R src/static build && cp -R src/views build",
+    "prebuild": "rd /s \"build\"",
+    "build": "npm run build:server && npm run build:assets && npm run copyAll",
+    "start": "node build/init.js",
+    "prestart": "npm run build"
   },
   "author": "m",
   "license": "ISC",
   "dependencies": {
-    "@babel/core": "^7.10.2",
-    "@babel/node": "^7.10.1",
+    "@babel/node": "^7.10.5",
     "@babel/polyfill": "^7.10.4",
     "@babel/preset-env": "^7.10.2",
     "autoprefixer": "^9.8.4",
@@ -49,6 +54,12 @@
     "webpack-cli": "^3.3.12"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.24.1",
     "cross-env": "^7.0.2",
     "eslint": "^7.3.1",
     "eslint-config-airbnb-base": "^14.2.0",
