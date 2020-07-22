@@ -5,7 +5,7 @@ dotenv.config();
 //work in local : MONGO_URL
 //for Productino : MONGO_URL_PROD
 mongoose.connect(
-  process.env.PRODUCION ? process.env.MONGO_URL_PROD : process.env.MONGO_URL,
+  process.env.PRODUCTION ? process.env.MONGO_URL_PROD : process.env.MONGO_URL,
   {
     useNewUrlParser: true,
     useFindAndModify: false,
