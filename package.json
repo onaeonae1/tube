@@ -10,9 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
     "@babel/node": "^7.10.5",
     "@babel/polyfill": "^7.10.4",
-    "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.2",
     "autoprefixer": "^9.8.4",
     "aws-sdk": "^2.716.0",
@@ -59,13 +59,6 @@
     "prestart": "npm run build"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.10.5",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-2": "^6.24.1",
-    "cross-env": "^7.0.2",
     "eslint": "^7.3.1",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
