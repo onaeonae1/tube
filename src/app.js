@@ -20,7 +20,6 @@ import "./passport";
 const app = express();
 
 const CokieStore = MongoStore(session);
-
 app.use(helmet());
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));

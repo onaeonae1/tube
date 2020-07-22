@@ -4,10 +4,11 @@ cloning youtube with javascript and nodejs
 
 ## Changes
 
-- 파일들을 로컬에서 aws s3로 옮김(multer -> multerS3)
-- DB를 로컬에서 mongoDB atlas로 배포함
-- 비디오 플레이어 기능 대부분 구현
+- Heroku에 배포 완료
 
 ## TODO
 
-- 배포하기
+- 댓글 삭제 기능
+- 비디오 일시정지 스페이스바 버튼으로
+- 검색 문제
+- 전체 해결하고 다시 Heroku에 배포하기

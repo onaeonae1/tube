@@ -4,10 +4,13 @@ import dotenv from "dotenv";
 dotenv.config();
 //work in local : MONGO_URL
 //for Productino : MONGO_URL_PROD
-mongoose.connect(process.env.MONGO_URL_PROD, {
-  useNewUrlParser: true,
-  useFindAndModify: false,
-});
+mongoose.connect(
+  process.env.PRODUCION ? process.env.MONGO_URL_PROD : process.env.MONGO_URL,
+  {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+  }
+);
 
 const db = mongoose.connection;
 const handleOpen = () => console.log(`@@ connected to db!`);
