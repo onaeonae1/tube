@@ -4,6 +4,6 @@ cloning youtube with javascript and nodejs
 
 ## todo
 
-- [ ] 파일들 로컬 말고 다른 곳에 저장
-- [ ] Record 이후 Upload 기능
-- [ ] 조회수 , 댓글 기능
+- 파일들을 로컬에서 aws s3로 옮김(multer -> multerS3)
+- DB를 로컬에서 mongoDB atlas로 배포함
+- 비디오 플레이어 기능 대부분 구현

@@ -6,6 +6,7 @@ let streamObject;
 let videoRecorder;
 const handleVideoData = (event) => {
   const { data: videoFile } = event;
+  console.log(event.data);
   const link = document.createElement("a");
   link.href = URL.createObjectURL(videoFile);
   link.download = "recorded.webm";

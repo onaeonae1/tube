@@ -1,3 +1,5 @@
+import getBlobDuration from "get-blob-duration";
+
 const videoContainer = document.getElementById("jsVideoPlayer");
 const videoPlayer = document.querySelector("#jsVideoPlayer video");
 const playBtn = document.getElementById("jsPlayButton");
@@ -10,6 +12,13 @@ const progressBar = document.getElementById("jsProgress");
 const videoController = document.getElementById("jsVideoController");
 
 let isWaiting;
+
+const registerView = () => {
+  const videoId = window.location.href.split("/videos/")[1];
+  fetch(`/api/${videoId}/view`, {
+    method: "POST",
+  });
+};
 function handleSpaceBar(event) {
   console.log(event.keyCode);
   if (event.keyCode === 32) {
@@ -49,6 +58,7 @@ function handleVolumeClick() {
   }
 }
 function handleEnded() {
+  registerView();
   videoPlayer.currentTime = 0;
   videoPlayer.play();
 }
@@ -73,8 +83,8 @@ function handleProgress(event) {
   videoPlayer.fastSeek(reqTime);
 }
 function goFullScreen() {
-  videoContainer.requestFullscreen();
-  //videoPlayer.requestFullscreen();
+  //videoContainer.requestFullscreen();
+  videoPlayer.requestFullscreen();
   fullScrnBtn.innerHTML = '<i class = "fas fa-compress"></i>';
   fullScrnBtn.removeEventListener("click", goFullScreen);
   fullScrnBtn.addEventListener("click", exitFullScreen);
@@ -109,7 +119,10 @@ function getCurrentProgress() {
   const valTime = (videoPlayer.currentTime / videoPlayer.duration) * 100;
   progressBar.value = valTime;
 }
-function setTotalTime() {
+async function setTotalTime() {
+  const blob = await fetch(videoPlayer.src).then((response) => response.blob());
+  const duration = await getBlobDuration(blob);
+  console.log(duration);
   const totalTimeString = formatDate(videoPlayer.duration);
   totalTime.innerHTML = totalTimeString;
   setInterval(getCurrentTime, 500);
@@ -125,7 +138,7 @@ function init() {
   videoPlayer.addEventListener("mousemove", handleMouse);
   volumeRange.addEventListener("input", handleDrag);
   progressBar.addEventListener("input", handleProgress);
-  document.addEventListener("keydown", handleSpaceBar);
+  //document.addEventListener("keydown", handleSpaceBar);
 }
 if (videoContainer) {
   init();
