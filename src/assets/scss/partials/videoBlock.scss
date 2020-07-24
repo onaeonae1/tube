@@ -1,5 +1,7 @@
 .videoBlock {
   video {
+    max-width: 640px;
+    max-height: 360px;
     margin-bottom: 10px;
     max-width: 100%;
   }

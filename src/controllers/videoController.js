@@ -24,7 +24,6 @@ export const search = async (req, res) => {
     videos = await Video.find({
       title: { $regex: searchingBy, $options: "i" },
     });
-    console.log(videos);
   } catch (error) {
     console.log(error);
   }
@@ -78,14 +77,12 @@ export const getEditVideo = async (req, res) => {
   try {
     const video = await Video.findById(id);
     if (video.creator != req.user.id) {
-      console.log("access denied");
-      console.log(video.creator);
-      console.log(req.user.id);
       throw Error();
     } else {
       res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
     }
   } catch (error) {
+    req.flash("error", "you cant edit this video ");
     res.redirect(routes.home);
   }
 };
@@ -112,14 +109,13 @@ export const deleteVideo = async (req, res) => {
   try {
     const video = await Video.findById(id);
     if (video.creator != req.user.id) {
-      console.log("access denied");
-      console.log(video.creator);
-      console.log(req.user.id);
       throw Error();
     } else {
       await Video.findOneAndRemove({ _id: id });
+      req.flash("success", "Deleted Video");
     }
   } catch (error) {
+    req.flash("error", "failed to delete video");
     console.log(error);
   }
   res.redirect(routes.home);
@@ -155,6 +151,26 @@ export const postAddComment = async (req, res) => {
     });
     video.comments.push(newComment.id);
     video.save();
+    res.json(newComment);
+  } catch (error) {
+    res.status(400);
+  } finally {
+    res.end();
+  }
+};
+export const postDeleteComment = async (req, res) => {
+  const {
+    params: { id },
+    body: { commentid },
+  } = req;
+  try {
+    const vid = await Video.findById(id);
+    vid.comments.splice(vid.comments.indexOf(commentid));
+    vid.save();
+    const cmt = await Comment.findOneAndRemove({ _id: commentid });
+    console.log(cmt);
+    console.log("delete success");
+    res.status(200);
   } catch (error) {
     res.status(400);
   } finally {
