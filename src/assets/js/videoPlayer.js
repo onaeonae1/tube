@@ -83,16 +83,31 @@ function handleProgress(event) {
   videoPlayer.fastSeek(reqTime);
 }
 function goFullScreen() {
-  //videoContainer.requestFullscreen();
-  videoPlayer.requestFullscreen();
-  fullScrnBtn.innerHTML = '<i class = "fas fa-compress"></i>';
+  if (videoContainer.requestFullscreen) {
+    videoContainer.requestFullscreen();
+  } else if (videoContainer.mozRequestFullScreen) {
+    videoContainer.mozRequestFullScreen();
+  } else if (videoContainer.webkitRequestFullscreen) {
+    videoContainer.webkitRequestFullscreen();
+  } else if (videoContainer.msRequestFullscreen) {
+    videoContainer.msRequestFullscreen();
+  }
+  fullScrnBtn.innerHTML = '<i class="fas fa-compress"></i>';
   fullScrnBtn.removeEventListener("click", goFullScreen);
   fullScrnBtn.addEventListener("click", exitFullScreen);
 }
 function exitFullScreen() {
-  fullScrnBtn.innerHTML = '<i class = "fas fa-expand"></i>';
+  fullScrnBtn.innerHTML = '<i class="fas fa-expand"></i>';
   fullScrnBtn.addEventListener("click", goFullScreen);
-  document.exitFullscreen();
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
 }
 const formatDate = (seconds) => {
   const secondsNumber = parseInt(seconds, 10);
@@ -120,6 +135,7 @@ function getCurrentProgress() {
   progressBar.value = valTime;
 }
 async function setTotalTime() {
+  console.log("measuring time..");
   const blob = await fetch(videoPlayer.src).then((response) => response.blob());
   const duration = await getBlobDuration(blob);
   console.log(duration);
