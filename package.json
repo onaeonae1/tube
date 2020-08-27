@@ -1,9 +1,12 @@
 {
   "name": "tube",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.16"
+  },
   "description": "tuuuuuuube",
   "main": "index.js",
-  "author": "m",
+  "author": "onaeonae1",
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.10.5",
