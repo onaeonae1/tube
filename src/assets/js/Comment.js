@@ -6,7 +6,6 @@ const decreaseNumber = (req, res) => {
   commentNumber.innerHTML = parseInt(commentNumber.innerHTML, 10) - 1;
 };
 const sendDelete = async (commentid) => {
-  console.log(`delete ${commentid}`);
   const videoId = window.location.href.split("/videos/")[1];
   const response = await axios({
     url: `/api/${videoId}/commentdelete`,
@@ -27,17 +26,18 @@ const delComment = (commentid) => {
   decreaseNumber();
 };
 const handleDelete = (event) => {
-  console.log("Delete Event Waiting");
-  sendDelete(event.target.parentElement.id);
+  const div = event.target.parentElement;
+  const targetli = div.parentElement.id;
+  sendDelete(targetli);
 };
 export const initalize = () => {
   console.log("initalize");
   for (var i = 0; i < commentList.children.length; i++) {
-    const now = commentList.children.item(i);
-    const btn = now.children.namedItem("commentDelete");
+    const now = commentList.children.item(i); //li
+    const div = now.children.item(0); //div
+    const btn = div.children.namedItem("commentDelete"); //button
     if (btn) {
       btn.addEventListener("click", handleDelete);
-      console.log(`event added for ${now.innerHTML}`);
     }
   }
 };
@@ -59,18 +59,38 @@ const sendComment = async (comment) => {
 const increaseNumber = () => {
   commentNumber.innerHTML = parseInt(commentNumber.innerHTML, 10) + 1;
 };
+// AJAX 처리 되야함. commentData 긁어오는 기능 필요 -> 외부로 처리해야
 const addComment = (comment) => {
-  console.log(comment);
-  const li = document.createElement("li");
-  const span = document.createElement("span");
-  const btn = document.createElement("button");
-  span.innerHTML = comment.text;
-  btn.innerHTML = "❌";
-  btn.setAttribute("id", "commentDelete");
-  li.setAttribute("id", comment._id);
-  li.appendChild(span);
-  li.appendChild(btn);
-  commentList.prepend(li);
+  const commentNow = comment[0];
+  console.log(commentNow);
+  const mainLine = document.createElement("li");
+  mainLine.setAttribute("id", commentNow.id);
+  const commentBlock = document.createElement("div");
+  commentBlock.setAttribute("class", "commentBlock");
+  const img = document.createElement("img");
+  img.setAttribute("class", "image");
+  img.src = commentNow.avatarUrl;
+  const createdAt = document.createElement("span");
+  createdAt.setAttribute("class", "crated__at");
+  createdAt.innerHTML = "Right Now";
+  const commentCreator = document.createElement("span");
+  commentCreator.setAttribute("class", "comment__creator");
+  commentCreator.innerHTML = commentNow.name;
+  const commentText = document.createElement("span");
+  commentText.setAttribute("class", "comment__text");
+  commentText.innerHTML = commentNow.text;
+  const commentDelete = document.createElement("button");
+  commentDelete.setAttribute("id", "commentDelete");
+  commentDelete.setAttribute("class", "deleteButton");
+  commentDelete.innerHTML = "❌";
+  //add
+  commentBlock.appendChild(img);
+  commentBlock.appendChild(createdAt);
+  commentBlock.appendChild(commentCreator);
+  commentBlock.appendChild(commentText);
+  commentBlock.appendChild(commentDelete);
+  mainLine.appendChild(commentBlock);
+  commentList.prepend(mainLine);
   initalize();
   increaseNumber();
 };

@@ -1,12 +1,18 @@
 import routes from "../routes";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
+import User from "../models/User";
 // Home
 
 export const home = async (req, res) => {
   try {
     const videos = await Video.find({}).sort({ _id: -1 });
-    res.render("home", { pageTitle: "Home", videos });
+    console.log(videos);
+    if (videos.length === 0) {
+      res.render("home", { pageTitle: "Home", videos, isEmpty: true });
+    } else {
+      res.render("home", { pageTitle: "Home", videos });
+    }
   } catch (error) {
     console.log(error);
     res.render("home", { pageTitle: "Home", videos: [] });
@@ -51,9 +57,24 @@ export const postUpload = async (req, res) => {
   req.user.save();
   res.redirect(routes.videoDetail(newVideo.id));
 };
-
+//temp function : for .. of 를 통해 comment에 필요한 정보들을 뽑아옴
+const getCommentData = async (vidComments) => {
+  const commentData = [];
+  for (const item of vidComments) {
+    const comment = await Comment.findById(item._id);
+    const user = await User.findById(comment.creator);
+    commentData.push({
+      id: comment.id,
+      name: user.name,
+      avatarUrl: user.avatarUrl,
+      text: comment.text,
+      creator: comment.creator,
+      createdAt: comment.createdAt,
+    });
+  }
+  return commentData;
+};
 // Video Detail
-
 export const videoDetail = async (req, res) => {
   const {
     params: { id },
@@ -62,7 +83,9 @@ export const videoDetail = async (req, res) => {
     const video = await Video.findById(id)
       .populate("creator")
       .populate("comments");
-    res.render("videoDetail", { pageTitle: video.title, video });
+    //댓글 정보 불러오기 : 해당 부분의 설계는 매우 좋지 못함! 잠재적 수정 사항
+    const commentData = await getCommentData(video.comments);
+    res.render("videoDetail", { pageTitle: video.title, video, commentData });
   } catch (error) {
     res.redirect(routes.home);
   }
@@ -138,12 +161,14 @@ export const postRegisterView = async (req, res) => {
   }
 };
 export const postAddComment = async (req, res) => {
+  //form 을 통해 들어온 정보를 긁어서 DB에 넣고 저장
   const {
     params: { id },
     body: { comment },
     user,
   } = req;
   try {
+    //newComment를 만들고 Video에 추가
     const video = await Video.findById(id);
     const newComment = await Comment.create({
       text: comment,
@@ -151,7 +176,12 @@ export const postAddComment = async (req, res) => {
     });
     video.comments.push(newComment.id);
     video.save();
-    res.json(newComment);
+    const nowUser = await User.findById(user.id);
+    nowUser.comments.push(newComment.id);
+    nowUser.save();
+    const commentData = await getCommentData([newComment]);
+    console.log(commentData);
+    res.json(commentData);
   } catch (error) {
     res.status(400);
   } finally {
@@ -164,12 +194,19 @@ export const postDeleteComment = async (req, res) => {
     body: { commentid },
   } = req;
   try {
+    //id : 댓글을 삭제할 video의 id
+    //commentid: 삭제할 댓글의 id
+    console.log(`video id : ${id}`);
+    console.log(`comment id : ${commentid}`);
+    const temp = await Comment.findById(commentid);
+    const user = await User.findById(temp.creator);
     const vid = await Video.findById(id);
+    user.comments.splice(user.comments.indexOf(commentid));
+    user.save();
     vid.comments.splice(vid.comments.indexOf(commentid));
     vid.save();
     const cmt = await Comment.findOneAndRemove({ _id: commentid });
-    console.log(cmt);
-    console.log("delete success");
+    cmt.save();
     res.status(200);
   } catch (error) {
     res.status(400);

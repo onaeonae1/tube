@@ -11,15 +11,14 @@ import {
   githubLogin,
   postGithubLogIn,
   getMe,
-  facebookLogIn,
-  postFacebookLogin,
+  about,
 } from "../controllers/userController";
 import { onlyPublic, onlyPrivate } from "../middlewares";
 
 const globalRouter = express.Router();
-
+globalRouter.get(routes.about, about);
 globalRouter.get(routes.join, onlyPublic, getJoin);
-globalRouter.post(routes.join, onlyPublic, postJoin, postLogin);
+globalRouter.post(routes.join, onlyPublic, postJoin, postLogin); //가입 후 로그인으로 이동
 
 globalRouter.get(routes.login, onlyPublic, getLogin);
 globalRouter.post(routes.login, onlyPublic, postLogin);

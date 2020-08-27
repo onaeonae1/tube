@@ -23,7 +23,7 @@ const multerAvatar = multer({
   }),
 });
 export const localsMiddleware = (req, res, next) => {
-  res.locals.siteName = "tube";
+  res.locals.siteName = "OUR tube";
   res.locals.routes = routes;
   res.locals.loggedUser = req.user || null;
   next();

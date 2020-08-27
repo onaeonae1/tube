@@ -2,6 +2,8 @@ extends layouts/main.pug
 include mixins/videoBlock.pug
 
 block content
+    if(isEmpty)
+        h1 there is no video for now. upload FIRST video!
     .home-videos
         each item in videos
             +videoBlock({

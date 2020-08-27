@@ -1,6 +1,6 @@
 extends layouts/main
 include mixins/videoPlayer
-
+include mixins/commentBlock
 block content
     .video-detail__container
         +videoPlayer({
@@ -13,7 +13,6 @@ block content
                     button Edit video
             h5.video__title=video.title
             p.video__description=video.description
-            
             if video.views === 1
                 span.video__views 1 view
             else 
@@ -34,16 +33,25 @@ block content
                 form.add__comment#jsAddComment
                     input(type="text", placeholder="Add a comment")
             ul.video__comments-list#jsCommentList
-                if(loggedUser===null)
-                     each comment in video.comments.reverse()
+                if(loggedUser===null) 
+                     each comment in commentData.reverse()
                         li(id=comment.id)
-                            span=comment.text
+                            +commentBlock({
+                                avatarUrl:comment.avatarUrl,
+                                createdAt:comment.createdAt,
+                                creator:comment.creator,
+                                loggedUserId:null,
+                                name:comment.name,
+                                text:comment.text,
+                            })
                 else
-                    each comment in video.comments.reverse()
-                        if(loggedUser.id==comment.creator)
-                            li(id=comment.id)
-                                span=comment.text
-                                button#commentDelete="❌"
-                        else
-                            li(id=comment.id)
-                                span=comment.text
+                    each comment in commentData.reverse()
+                        li(id=comment.id)
+                            +commentBlock({
+                                avatarUrl:comment.avatarUrl,
+                                createdAt:comment.createdAt,
+                                creator:comment.creator,
+                                loggedUserId:loggedUser.id,
+                                name:comment.name,
+                                text:comment.text,
+                            })

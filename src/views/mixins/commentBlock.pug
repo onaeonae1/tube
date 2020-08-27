@@ -1,0 +1,11 @@
+mixin commentBlock(comment ={})
+    .commentBlock
+        img.image(src=comment.avatarUrl)
+        span.created__at=comment.createdAt
+        |
+        span.comment__creator=comment.name
+        |
+        span.comment__text=comment.text
+        if(comment.loggedUserId)
+            if(comment.loggedUserId==comment.creator)
+                button.deleteButton#commentDelete="❌"

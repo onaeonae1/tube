@@ -154,6 +154,7 @@ function init() {
   videoPlayer.addEventListener("mousemove", handleMouse);
   volumeRange.addEventListener("input", handleDrag);
   progressBar.addEventListener("input", handleProgress);
+  videoPlayer.addEventListener("click", handlePlayClick);
   //document.addEventListener("keydown", handleSpaceBar);
 }
 if (videoContainer) {

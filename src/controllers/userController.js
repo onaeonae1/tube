@@ -5,7 +5,9 @@ import User from "../models/User";
 export const getJoin = (req, res) => {
   res.render("join", { pageTitle: "Join" });
 };
-
+export const about = (req, res) => {
+  res.render("about", { pageTitle: "About" });
+};
 export const postJoin = async (req, res, next) => {
   const {
     body: { name, email, password, password2 },
@@ -49,6 +51,7 @@ export const githubLoginCallback = async (_, __, profile, cb) => {
     _json: { id, avatar_url: avatarUrl, name, email },
   } = profile;
   try {
+    //중복된 유저 탐색
     const user = await User.findOne({ email });
     if (user) {
       user.githubId = id;

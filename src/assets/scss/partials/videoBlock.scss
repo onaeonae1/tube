@@ -1,9 +1,10 @@
 .videoBlock {
+  width: 480px;
+  height: 360px;
   video {
-    max-width: 640px;
-    max-height: 360px;
     margin-bottom: 10px;
-    max-width: 100%;
+    max-width: 480px;
+    max-height: 270px;
   }
   .videoBlock__title {
     font-size: 18px;

@@ -4,7 +4,7 @@ const JOIN = "/join";
 const LOGIN = "/login";
 const LOGOUT = "/logout";
 const SEARCH = "/search";
-
+const ABOUT = "/about";
 // Users
 
 const USERS = "/users";
@@ -43,6 +43,7 @@ const routes = {
   logout: LOGOUT,
   search: SEARCH,
   users: USERS,
+  about: ABOUT,
   userDetail: (id) => {
     if (id) {
       return `/users/${id}`;
