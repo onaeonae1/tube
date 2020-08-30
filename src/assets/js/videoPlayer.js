@@ -20,7 +20,6 @@ const registerView = () => {
   });
 };
 function handleSpaceBar(event) {
-  console.log(event.keyCode);
   if (event.keyCode === 32) {
     handlePlayClick();
   }
@@ -155,7 +154,7 @@ function init() {
   volumeRange.addEventListener("input", handleDrag);
   progressBar.addEventListener("input", handleProgress);
   videoPlayer.addEventListener("click", handlePlayClick);
-  //document.addEventListener("keydown", handleSpaceBar);
+  document.addEventListener("keydown", handleSpaceBar);
 }
 if (videoContainer) {
   init();

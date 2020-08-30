@@ -59,7 +59,6 @@ const sendComment = async (comment) => {
 const increaseNumber = () => {
   commentNumber.innerHTML = parseInt(commentNumber.innerHTML, 10) + 1;
 };
-// AJAX 처리 되야함. commentData 긁어오는 기능 필요 -> 외부로 처리해야
 const addComment = (comment) => {
   const commentNow = comment[0];
   console.log(commentNow);

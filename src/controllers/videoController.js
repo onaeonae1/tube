@@ -7,7 +7,6 @@ import User from "../models/User";
 export const home = async (req, res) => {
   try {
     const videos = await Video.find({}).sort({ _id: -1 });
-    console.log(videos);
     if (videos.length === 0) {
       res.render("home", { pageTitle: "Home", videos, isEmpty: true });
     } else {
@@ -53,6 +52,7 @@ export const postUpload = async (req, res) => {
     description,
     creator: req.user.id,
   });
+  console.log("created File");
   req.user.videos.push(newVideo.id);
   req.user.save();
   res.redirect(routes.videoDetail(newVideo.id));
@@ -83,7 +83,6 @@ export const videoDetail = async (req, res) => {
     const video = await Video.findById(id)
       .populate("creator")
       .populate("comments");
-    //댓글 정보 불러오기 : 해당 부분의 설계는 매우 좋지 못함! 잠재적 수정 사항
     const commentData = await getCommentData(video.comments);
     res.render("videoDetail", { pageTitle: video.title, video, commentData });
   } catch (error) {
@@ -135,7 +134,7 @@ export const deleteVideo = async (req, res) => {
       throw Error();
     } else {
       await Video.findOneAndRemove({ _id: id });
-      req.flash("success", "Deleted Video");
+      req.flash("success", "Successfully Deleted Video");
     }
   } catch (error) {
     req.flash("error", "failed to delete video");

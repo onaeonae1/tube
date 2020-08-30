@@ -1,15 +1,20 @@
 # Tube
 
-cloning youtube with javascript and nodejs
+- cloning youtube with javascript and nodejs
+
+## 설명
+
+- 배포 : [Heroku](https://powerful-mountain-41200.herokuapp.com/)
 
 ## Changes
 
-- 댓글 기능 수정 : 더 자세한 댓글 보기 가능, 삭제때 발생한 문제들 해결
-- DB 문제 해결 : 수정, 삭제 에서 있었던 문제 해결, 로컬 저장소 정리
-- 썸네일 문제 : 검색시 나오지 않던 썸네일을 나오도록 수정
+- 비디오 업로드 : 업로드 중임을 표시해줌
+- 메뉴 바 문제 해결
+- ABOUT page
 
 ## TODO
 
-- 비디오 일시정지 스페이스바 버튼으로 추가하기
+- 비디오 업로드 progress bar 추가 필요.
+- 댓글 기능들 개선 : 수정, 답글, 더 보기 기능
 - 비디오 업로드 때 encoding 해주는 과정이 필요. 이를 통해 전체시간 계산할 수 있게
-- 브라우저에 따른 전체화면, 빠른이동(fastseek) 문제 개선
+- 브라우저에 따른 전체화면, 빠른이동(fastseek은 firefox말고 안됨) 문제 개선
