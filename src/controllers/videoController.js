@@ -8,12 +8,13 @@ export const home = async (req, res) => {
   try {
     const videos = await Video.find({}).sort({ _id: -1 });
     if (videos.length === 0) {
+      req.flash("error", "We dont have video yet!");
       res.render("home", { pageTitle: "Home", videos, isEmpty: true });
     } else {
       res.render("home", { pageTitle: "Home", videos });
     }
   } catch (error) {
-    console.log(error);
+    req.flash("error", "There was an error Loading video");
     res.render("home", { pageTitle: "Home", videos: [] });
   }
 };
