@@ -15,13 +15,10 @@ export const awsDeleteVideo = async (req, res, next) => {
   const video = await Video.findById(id);
   const url = video.fileUrl.split("/");
   const delFileName = url[url.length - 1];
-  console.log(url);
-  console.log(delFileName);
   const params = {
     Bucket: "tube-onaeoane1/videos",
     Key: delFileName,
   };
-  console.log(params);
   s3.deleteObject(params, function (err, data) {
     if (err) {
       console.log("aws video delete error");

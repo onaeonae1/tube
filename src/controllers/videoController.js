@@ -134,6 +134,9 @@ export const deleteVideo = async (req, res) => {
     if (video.creator != req.user.id) {
       throw Error();
     } else {
+      if (video.comments) {
+        console.log(video.comments);
+      }
       await Video.findOneAndRemove({ _id: id });
       req.flash("success", "Successfully Deleted Video");
     }
